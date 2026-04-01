@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Fix</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #f5f7fa;
+        }
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 0.5rem;
+            background: #0a6fb7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn-danger {
+            background: #b42318;
+        }
+        .info {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        code {
+            background: #f0f0f0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚨 Emergency Fix Page</h1>
+    
+    <div class="info">
+        <h3>Current State:</h3>
+        <p><strong>Token:</strong> <span id="token-status">Checking...</span></p>
+        <p><strong>User:</strong> <span id="user-status">Checking...</span></p>
+        <p><strong>User Data:</strong> <pre id="user-data"></pre></p>
+    </div>
+
+    <button class="btn" onclick="checkStorage()">🔍 Check Storage</button>
+    <button class="btn btn-danger" onclick="clearAll()">🗑️ Clear Everything & Reload</button>
+    <button class="btn" onclick="fixRole()">🔧 Force Set Manager Role</button>
+    <button class="btn" onclick="goToLogin()">🏠 Go to Login</button>
+
+    <script>
+        function checkStorage() {
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+            
+            document.getElementById('token-status').textContent = token ? '✅ EXISTS' : '❌ MISSING';
+            
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                document.getElementById('user-status').textContent = '✅ EXISTS' + (user.role ? ` (${user.role})` : ' ⚠️ NO ROLE');
+                document.getElementById('user-data').textContent = JSON.stringify(user, null, 2);
+            } else {
+                document.getElementById('user-status').textContent = '❌ MISSING';
+                document.getElementById('user-data').textContent = '';
+            }
+        }
+
+        function clearAll() {
+            if (confirm('This will clear all data and reload the page. Continue?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = '/login';
+            }
+        }
+
+        function fixRole() {
+            const userStr = localStorage.getItem('user');
+            if (!userStr) {
+                alert('No user data found! Please login first.');
+                return;
+            }
+            
+            const user = JSON.parse(userStr);
+            if (!user.role) {
+                user.role = 'manager';
+                localStorage.setItem('user', JSON.stringify(user));
+                alert('✅ Fixed! Role set to manager. Reloading...');
+                window.location.reload();
+            } else {
+                alert(`User already has role: ${user.role}`);
+            }
+        }
+
+        function goToLogin() {
+            window.location.href = '/login';
+        }
+
+        // Auto-check on load
+        checkStorage();
+    </script>
+</body>
+</html>
