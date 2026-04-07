@@ -8,6 +8,9 @@ import ManagerDashboard from './pages/ManagerDashboard';
 import UserDashboard from './pages/UserDashboard';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import { fetchAccount, logout, restoreUserState } from './slices/UserSlice.jsx';
+import LandingPage from './pages/LandingPage';
+import LandingEditor from './pages/LandingEditor';
+import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
 const DASHBOARD_CONFIG = {
@@ -85,6 +88,16 @@ export default function App() {
                 <main className="dashboard-main">
                     <Routes>
                         <Route path={dashboardConfig.path} element={<DashboardComponent />} />
+                        {user?.role === 'admin' && (
+                            <Route 
+                                path="/admin/landing-editor" 
+                                element={
+                                    <ErrorBoundary>
+                                        <LandingEditor />
+                                    </ErrorBoundary>
+                                } 
+                            />
+                        )}
                         <Route path="*" element={<Navigate to={dashboardConfig.path} replace />} />
                     </Routes>
                 </main>
@@ -94,24 +107,39 @@ export default function App() {
 
     // Not authenticated - show auth pages
     return (
-        <div className="auth-page">
-            <div className="auth-blob auth-blob-one" aria-hidden="true" />
-            <div className="auth-blob auth-blob-two" aria-hidden="true" />
-
-            <div className="auth-layout">
-                <aside className="auth-brand">
-                    <h1>SmartFix</h1>
-                    <p>Streamlined complaint management for your peace of mind.</p>
-                </aside>
-                <main className="auth-panel">
-                    <Routes>
-                        <Route path="/" element={<Navigate to="/login" replace />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="*" element={<Navigate to="/login" replace />} />
-                    </Routes>
-                </main>
-            </div>
-        </div>
+        <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={
+                <div className="auth-page">
+                    <div className="auth-blob auth-blob-one" aria-hidden="true" />
+                    <div className="auth-blob auth-blob-two" aria-hidden="true" />
+                    <div className="auth-layout">
+                        <aside className="auth-brand">
+                            <h1>SmartFix</h1>
+                            <p>Streamlined complaint management for your peace of mind.</p>
+                        </aside>
+                        <main className="auth-panel">
+                            <Login />
+                        </main>
+                    </div>
+                </div>
+            } />
+            <Route path="/register" element={
+                <div className="auth-page">
+                    <div className="auth-blob auth-blob-one" aria-hidden="true" />
+                    <div className="auth-blob auth-blob-two" aria-hidden="true" />
+                    <div className="auth-layout">
+                        <aside className="auth-brand">
+                            <h1>SmartFix</h1>
+                            <p>Streamlined complaint management for your peace of mind.</p>
+                        </aside>
+                        <main className="auth-panel">
+                            <Register />
+                        </main>
+                    </div>
+                </div>
+            } />
+            <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
     );
 }

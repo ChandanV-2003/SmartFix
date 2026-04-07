@@ -14,6 +14,7 @@ const authorizeUser = require('./app/middleware/authorize')
 const usersCltr = require('./app/controller/user-cltr')
 const complaintCtrl = require('./app/controller/complaint-cltr')
 const groupMessageCtrl = require('./app/controller/group-message-cltr');
+const landingCltr = require('./app/controller/landing-cltr');
 app.use(express.json())
 app.use(cors())
 app.use(morgan('common', {
@@ -68,6 +69,10 @@ app.delete('/api/complaints/:id', authenticateUser, authorizeUser(['admin']), co
 // Group Messenger links
 app.post('/api/group-messages', authenticateUser, authorizeUser(['admin', 'manager']), groupMessageCtrl.create);
 app.get('/api/group-messages', authenticateUser, authorizeUser(['admin', 'manager']), groupMessageCtrl.getAll);
+
+// Landing Page links
+app.get('/api/landing', landingCltr.get);
+app.put('/api/landing', authenticateUser, authorizeUser(['admin']), landingCltr.update);
 
 server.listen(port, () => {
   console.log(`server is running on port ${port}`);

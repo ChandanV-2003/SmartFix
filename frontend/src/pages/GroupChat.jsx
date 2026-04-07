@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
-import axiosInstance from '../cofig/axios';
+import axiosInstance from '../config/axios';
 
 export default function GroupChat() {
     const { user, token } = useSelector((state) => state.user);
@@ -19,7 +19,7 @@ export default function GroupChat() {
                 });
                 setMessages(data);
             } catch (err) {
-                // error fetching messages handled silently
+                console.error('Error fetching messages:', err);
             }
         };
 
@@ -71,7 +71,7 @@ export default function GroupChat() {
             });
             setNewMessage('');
         } catch (err) {
-            // error sending message handled silently
+            console.error('Error sending message:', err);
         }
     };
 

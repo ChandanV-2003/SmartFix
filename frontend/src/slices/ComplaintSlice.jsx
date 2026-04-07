@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosInstance from '../cofig/axios';
+import axiosInstance from '../config/axios';
 
 // Create a new complaint
 export const createComplaint = createAsyncThunk(

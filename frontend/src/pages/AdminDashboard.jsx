@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllUsers, updateUserRole } from '../slices/UserSlice.jsx';
 import { fetchAllComplaints } from '../slices/ComplaintSlice.jsx';
@@ -70,6 +71,24 @@ export default function AdminDashboard() {
                     >
                         Group Messenger
                     </button>
+                    <Link 
+                        to="/admin/landing-editor" 
+                        style={{ 
+                            marginLeft: 'auto', 
+                            padding: '0.75rem 1.25rem', 
+                            background: 'linear-gradient(130deg, #0a6fb7, #02aab0)', 
+                            color: 'white', 
+                            borderRadius: '8px', 
+                            textDecoration: 'none',
+                            fontWeight: '700',
+                            fontSize: '0.9rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                        }}
+                    >
+                        <span>⚙️</span> Manage Landing Page
+                    </Link>
                 </div>
 
                 {/* Users Tab */}

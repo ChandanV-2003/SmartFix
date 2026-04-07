@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateComplaintStatus, deleteComplaint, assignTechnicianToComplaint } from '../slices/ComplaintSlice';
 import { fetchAllUsers } from '../slices/UserSlice';
-import axiosInstance from '../cofig/axios';
+import axiosInstance from '../config/axios';
 
 export default function ComplaintList() {
     const dispatch = useDispatch();
