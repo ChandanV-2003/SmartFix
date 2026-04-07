@@ -1,5 +1,11 @@
 const express = require('express');
 require('dotenv').config();
+process.on('unhandledRejection', (reason, promise) => {
+    console.log('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+process.on('uncaughtException', (err) => {
+    console.log('Uncaught Exception:', err);
+});
 const http = require('http');
 const { Server } = require('socket.io');
 const app = express();
@@ -8,7 +14,7 @@ const morgan = require('morgan');
 const cors = require('cors')
 const fs = require('fs');
 const path = require('path');
-const port = process.env.PORT || 5050
+const port = Number(process.env.PORT) || 5050;
 const authenticateUser = require('./app/middleware/authenticate')
 const authorizeUser = require('./app/middleware/authorize')
 const usersCltr = require('./app/controller/user-cltr')

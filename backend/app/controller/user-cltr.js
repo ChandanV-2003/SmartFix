@@ -29,7 +29,7 @@ usersCltr.register = async (req, res) => {
             res.status(201).json(safeUser);
         }
     } catch (err) {
-
+        console.log(err);
         res.status(500).json({ error: 'Something went wrong!!' });
     }
 };
@@ -68,7 +68,7 @@ usersCltr.account = async(req, res) => {
         const user = await User.findById(req.userId).select('-password');
         res.json(user);
     } catch (err) {
-
+        console.log(err);
         res.status(500).json({ error: "Something went wrong"});
     }
 };
@@ -78,7 +78,7 @@ usersCltr.list = async(req, res) => {
         const users = await User.find().select('-password');
         res.json(users);
     } catch (err) {
-
+        console.log(err);
         res.status(500).json({ error: "Something went wrong"});
     }
 };
@@ -115,7 +115,7 @@ usersCltr.update = async (req, res) => {
         }
         res.json(user);
     } catch (err) {
-
+        console.log(err);
         res.status(500).json({ error: 'Something went wrong' });
     }
 };
@@ -135,7 +135,7 @@ usersCltr.remove = async (req, res) => {
         res.json(user);
 
     } catch (err) {
-
+        console.log(err);
         res.status(500).json({ error: "Something went wrong"});
     }
 };
