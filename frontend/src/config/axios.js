@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3030/api',
+    baseURL: 'https://smartfix-backend.onrender.com/api',
     timeout: 30000 // Reduced timeout from 100s to 30s to fail fast
 });
 

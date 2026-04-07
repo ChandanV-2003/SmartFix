@@ -32,8 +32,8 @@ export default function GroupChat() {
     useEffect(() => {
         if (!user || !token || (user.role !== 'admin' && user.role !== 'manager')) return;
 
-        // Extract base URL from axios instance (e.g., http://localhost:3030)
-        let baseUrl = 'http://localhost:3030';
+        // Extract base URL from axios instance (e.g., https://smartfix-backend.onrender.com)
+        let baseUrl = 'https://smartfix-backend.onrender.com';
         if (axiosInstance.defaults.baseURL) {
             baseUrl = axiosInstance.defaults.baseURL.replace('/api', '');
         }
