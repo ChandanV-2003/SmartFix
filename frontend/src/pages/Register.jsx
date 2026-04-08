@@ -71,10 +71,15 @@ export default function Register(){
                     <input
                         id="register-phone"
                         required
-                        type="text"
+                        type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="10-digit mobile number"
+                        inputMode="numeric"
+                        pattern="[0-9]{10}"
+                        minLength={10}
+                        maxLength={10}
+                        title="Enter a valid 10-digit phone number"
                     />
                 </div>
 
@@ -87,6 +92,9 @@ export default function Register(){
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Choose a strong password"
+                        minLength={8}
+                        maxLength={128}
+                        title="Password must be at least 8 characters"
                     />
                 </div>
 

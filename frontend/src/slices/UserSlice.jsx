@@ -4,12 +4,28 @@ import axiosInstance from '../config/axios';
 export const registerUser = createAsyncThunk(
     'user/registerUser',
     async ({ username, email, phone, password }, { rejectWithValue }) => {
+        const payload = { username, email, phone, password };
         try {
-            const { data } = await axiosInstance.post('/users/register', {
-                username, email, phone, password,
-            });
+            const { data } = await axiosInstance.post('/users/register', payload);
             return data;
         } catch (err) {
+            const shouldRetry = !err.response && (
+                err.code === 'ECONNABORTED' ||
+                String(err.message || '').toLowerCase().includes('timed out') ||
+                String(err.message || '').toLowerCase().includes('network error')
+            );
+
+            if (shouldRetry) {
+                try {
+                    const { data } = await axiosInstance.post('/users/register', payload);
+                    return data;
+                } catch (retryErr) {
+                    const retryApiError = retryErr.response?.data?.error;
+                    const retryMessage = retryErr.message;
+                    return rejectWithValue(retryApiError || retryMessage || 'Registration failed');
+                }
+            }
+
             const apiError = err.response?.data?.error;
             const message = err.message;
             return rejectWithValue(apiError || message || 'Registration failed');
