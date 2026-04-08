@@ -20,9 +20,8 @@ usersCltr.register = async (req, res) => {
             const hashPassword = await bcryptjs.hash(value.password, salt)
             user.password = hashPassword;
             const userCount = await User.countDocuments();
-            if (userCount == 0) {
-                user.role = 'admin';
-            }
+            user.role = userCount === 0 ? 'admin' : 'user';
+            user.status = 'active';
             await user.save();
             const safeUser = user.toObject();
             delete safeUser.password;

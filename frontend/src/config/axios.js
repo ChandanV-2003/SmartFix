@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const axiosInstance = axios.create({
     baseURL: 'https://smartfix-backend.onrender.com/api',
-    timeout: 30000 // Reduced timeout from 100s to 30s to fail fast
+    timeout: 60000
 });
 
 // Centralized error handling interceptor
@@ -12,6 +12,14 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (error) => {
+        if (error.code === 'ECONNABORTED') {
+            return Promise.reject(new Error('Request timed out. Please retry in a few seconds.'));
+        }
+
+        if (!error.response) {
+            return Promise.reject(new Error('Network error. Please check your connection and try again.'));
+        }
+
         if (error.response) {
             // Handle 401 Unauthorized globally
             if (error.response.status === 401) {

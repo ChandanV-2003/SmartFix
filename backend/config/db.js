@@ -9,4 +9,4 @@ const configureDB = async function() {
     }
 }
 
-module.exports = configureDB;
+module.exports = configureDB;

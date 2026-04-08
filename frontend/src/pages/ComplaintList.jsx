@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateComplaintStatus, deleteComplaint, assignTechnicianToComplaint } from '../slices/ComplaintSlice';
 import { fetchAllUsers } from '../slices/UserSlice';
@@ -17,7 +17,7 @@ export default function ComplaintList() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [aiError, setAiError] = useState(null);
 
-    const analyzeComplaintDetails = async (description) => {
+    const analyzeComplaintDetails = useCallback(async (description) => {
         setIsAnalyzing(true);
         setAiError(null);
         setAiData(null);
@@ -32,7 +32,7 @@ export default function ComplaintList() {
         } finally {
             setIsAnalyzing(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         if (currentUser?.role === 'manager' || currentUser?.role === 'admin') {
@@ -105,11 +105,11 @@ export default function ComplaintList() {
     useEffect(() => {
         if (selectedComplaint) {
             const updated = complaints.find(c => c._id === selectedComplaint._id);
-            if (updated) {
+            if (updated && updated !== selectedComplaint) {
                 setSelectedComplaint(updated);
             }
         }
-    }, [complaints]);
+    }, [complaints, selectedComplaint]);
 
     // Analyze when a new complaint is selected
     useEffect(() => {
@@ -121,7 +121,7 @@ export default function ComplaintList() {
             setAiError(null);
             setIsAnalyzing(false);
         }
-    }, [selectedComplaint?._id]);
+    }, [selectedComplaint, currentUser?.role, aiData, isAnalyzing, analyzeComplaintDetails]);
 
     return (
         <div className="complaint-list-container">

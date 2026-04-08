@@ -10,7 +10,9 @@ export const registerUser = createAsyncThunk(
             });
             return data;
         } catch (err) {
-            return rejectWithValue(err.response?.data?.error || 'Registration failed');
+            const apiError = err.response?.data?.error;
+            const message = err.message;
+            return rejectWithValue(apiError || message || 'Registration failed');
         }
     }
 );

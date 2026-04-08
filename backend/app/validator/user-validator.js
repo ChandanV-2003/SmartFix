@@ -23,24 +23,8 @@ const userRegisterValidationSchema = Joi.object({
         'string.empty': 'Password cannot be empty',
         'string.min': 'Password must be at least 8 characters',
         'any.required': 'Password is required',
-    }),
-
-    role: Joi.string()
-        .valid('admin', 'manager', 'technician', 'user')
-        .optional()
-        .default('user')
-        .messages({
-            'any.only': 'Role must be one of: admin, manager, technician, user',
-        }),
-
-    status: Joi.string()
-        .valid('active', 'inactive', 'suspended')
-        .optional()
-        .default('active')
-        .messages({
-            'any.only': 'Status must be one of: active, inactive, suspended',
-        }),
-});
+    })
+}).options({ stripUnknown: true });
 
 const userLoginValidationSchema = Joi.object({
     email: Joi.string().trim().email().required().messages({

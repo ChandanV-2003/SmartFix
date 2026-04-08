@@ -12,13 +12,26 @@ export default function Register(){
     const navigate = useNavigate();
     const {status, error} = useSelector((state) => state.user);
 
+    const formatError = (value) => {
+        if (!value) return null;
+        if (Array.isArray(value)) return value.join(', ');
+        if (typeof value === 'object') return JSON.stringify(value);
+        return value;
+    };
+
     const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(registerUser({username, email, phone, password})).unwrap()
-    .then(() => {
-        navigate('/login');
-    })
-    .catch(() => {});
+        e.preventDefault();
+        const cleanedPhone = phone.replace(/\D/g, '').slice(0, 10);
+        dispatch(registerUser({
+            username: username.trim(),
+            email: email.trim().toLowerCase(),
+            phone: cleanedPhone,
+            password
+        })).unwrap()
+            .then(() => {
+                navigate('/login');
+            })
+            .catch(() => {});
     };
 
     return (
@@ -77,7 +90,7 @@ export default function Register(){
                     />
                 </div>
 
-                {error && status === 'failed' && <p className="auth-error">{error}</p>}
+                {error && status === 'failed' && <p className="auth-error">{formatError(error)}</p>}
 
                 <button type="submit" disabled={status === 'loading'} className="primary-btn">
                     {status === 'loading' ? 'Registering...' : 'Register'}
